@@ -9,8 +9,7 @@ public class Parser {
     private Scanner scan;
     private Token currentToken;
     private Token peekToken;
-    private StringBuilder xmlOutput = new StringBu
-    ilder();
+    private StringBuilder xmlOutput = new StringBuilder();
     
     public Parser(byte[] input) {
         scan = new Scanner(input);
