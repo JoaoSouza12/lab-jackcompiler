@@ -218,6 +218,24 @@ public class Parser {
         }
         printNonTerminal("/expression");
     }
+
+    void parseParameterList() {
+        printNonTerminal("parameterList");
+
+        if (!peekTokenIs(RPAREN)) // verifica se tem pelo menos uma expressao
+        {
+            expectPeek(INT, CHAR, BOOLEAN, IDENT);
+            expectPeek(IDENT);
+        }
+
+        while (peekTokenIs(COMMA)) {
+            expectPeek(COMMA);
+            expectPeek(INT, CHAR, BOOLEAN, IDENT);
+            expectPeek(IDENT);
+        }
+
+        printNonTerminal("/parameterList");
+    }
     
     void parseSubroutineBody() {
     
