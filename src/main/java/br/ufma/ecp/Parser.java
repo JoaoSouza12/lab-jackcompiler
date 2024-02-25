@@ -20,8 +20,29 @@ public class Parser {
         parseClass();
     }
 
-    private void nextToken () {
-        currentToken = scan.nextToken();
+    void parseClass() {
+        printNonTerminal("class");
+        expectPeek(CLASS);
+        expectPeek(IDENT);
+        expectPeek(LBRACE);
+        
+        while (peekTokenIs(STATIC) || peekTokenIs(FIELD)) {
+            System.out.println(peekToken);
+            parseClassVarDec();
+        }
+    
+        while (peekTokenIs(FUNCTION) || peekTokenIs(CONSTRUCTOR) || peekTokenIs(METHOD)) {
+            parseSubroutineDec();
+        }
+
+        expectPeek(RBRACE);
+
+        printNonTerminal("/class");
+    }
+
+    private void nextToken() {
+        currentToken = peekToken;
+        peekToken = scan.nextToken();
     }
 
    private void match(TokenType t) {
