@@ -29,45 +29,45 @@ public class ParserTest extends TestSupport {
   }
 
 
-    @Test
-    public void testParseTermIdentifer() {
-        var input = "varName;";
-        var parser = new br.ufma.ecp.Parser(input.getBytes(StandardCharsets.UTF_8));
-        parser.parseTerm();
+  @Test
+  public void testParseTermIdentifer() {
+      var input = "varName;";
+      var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+      parser.parseTerm();
 
-        var expectedResult =  """
-          <term>
-          <identifier> varName </identifier>
-          </term>
-          """;
+      var expectedResult = """
+              <term>
+              <identifier> varName </identifier>
+              </term>
+              """;
 
-        var result = parser.XMLOutput();
-        expectedResult = expectedResult.replaceAll("  ", "");
-        result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
-        assertEquals(expectedResult, result);
+      var result = parser.XMLOutput();
+      expectedResult = expectedResult.replaceAll("  ", "");
+      result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
+      assertEquals(expectedResult, result);
 
-    }
+  }
 
 
 
-    @Test
-    public void testParseTermString() {
-        var input = "\"Hello World\"";
-        var parser = new br.ufma.ecp.Parser(input.getBytes(StandardCharsets.UTF_8));
-        parser.parseTerm();
+  @Test
+  public void testParseTermString() {
+      var input = "\"Hello World\"";
+      var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+      parser.parseTerm();
 
-        var expectedResult =  """
-          <term>
-          <stringConstant> Hello World </stringConstant>
-          </term>
-          """;
+      var expectedResult = """
+              <term>
+              <stringConstant> Hello World </stringConstant>
+              </term>
+              """;
 
-        var result = parser.XMLOutput();
-        expectedResult = expectedResult.replaceAll("  ", "");
-        result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
-        assertEquals(expectedResult, result);
+      var result = parser.XMLOutput();
+      expectedResult = expectedResult.replaceAll("  ", "");
+      result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
+      assertEquals(expectedResult, result);
 
-    }
+  }
 
 
 }
