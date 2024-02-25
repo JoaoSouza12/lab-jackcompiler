@@ -393,7 +393,17 @@ public class ParserTest extends TestSupport {
         assertEquals(expectedResult, result);
     }
 
+    @Test
+    public void testParserWithSquare() throws IOException {
+        var input = fromFile("Square/Square.jack");
+        var expectedResult =  fromFile("Square/Square.xml");
 
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parse();
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
+        assertEquals(expectedResult, result);
+    }
 
 
 }
