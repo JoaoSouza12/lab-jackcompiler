@@ -2,35 +2,22 @@ package br.ufma.ecp;
 
 import br.ufma.ecp.token.Token;
 import br.ufma.ecp.token.TokenType;
-
-import static br.ufma.ecp.token.TokenType.NUMBER;
-import static br.ufma.ecp.token.TokenType.STRING;
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-import static java.lang.foreign.MemorySegment.NULL;
+import static br.ufma.ecp.token.TokenType.*;
 
 public class Parser {
-    private br.ufma.ecp.Scanner scan;
+    private static class ParseError extends RuntimeException {}
+    private Scanner scan;
     private Token currentToken;
+    private Token peekToken;
+    private StringBuilder xmlOutput = new StringBuilder();
     
-    public Parser (byte[] input) {
-        scan = new br.ufma.ecp.Scanner(input);
-        currentToken = scan.nextToken();
-        
+    public Parser(byte[] input) {
+        scan = new Scanner(input);
+        nextToken();
     }
 
-    public void parse () {
-        expr();
-    }
-
-    void expr() {
-        number();
-        oper();
-    }
-
-    void number () {
-        System.out.println(currentToken.lexeme);
-        match(NUMBER);
+    public void parse() {
+        parseClass();
     }
 
     private void nextToken () {
