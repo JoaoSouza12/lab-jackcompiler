@@ -110,50 +110,6 @@ public class Parser {
         }
    }
 
-   void parseTerm() {
-    printNonTerminal("term");
-    switch (peekToken.type) {
-        case NUMBER:
-            expectPeek(NUMBER);
-            break;
-        case STRING:
-            expectPeek(STRING);
-            break;
-        case FALSE:
-        case NULL:
-        case TRUE:
-        case THIS:
-            expectPeek(FALSE, NULL, TRUE, THIS);
-            break;
-        case IDENT:
-            expectPeek(IDENT);
-            if (peekTokenIs(LPAREN) || peekTokenIs(DOT)) {
-                parseSubroutineCall();
-            } else { // variavel comum ou array
-                if (peekTokenIs(LBRACKET)) { // array
-                    expectPeek(LBRACKET);
-                    parseExpression();
-                    expectPeek(RBRACKET);
-                } 
-            }
-            break;
-        case LPAREN:
-            expectPeek(LPAREN);
-            parseExpression();
-            expectPeek(RPAREN);
-            break;
-        case MINUS:
-        case NOT:
-            expectPeek(MINUS, NOT);
-            parseTerm();
-            break;
-        default:
-            ;
-    }
-    printNonTerminal("/term");
-}
-
-
 void parseClassVarDec() {
     printNonTerminal("classVarDec");
     expectPeek(FIELD, STATIC);
@@ -233,15 +189,11 @@ void parseClassVarDec() {
             throw new Error("syntax error");
         }
     }
-    static public boolean isOperator(String op) {
-        return op!= "" && "+-*/<>=~&|".contains(op);
-    }
 
     public String VMOutput() {
         return "";
     }
  
-
     void parseIf() {
         printNonTerminal("ifStatement");
         expectPeek(IF);
@@ -342,7 +294,7 @@ void parseClassVarDec() {
         parseStatements();
         expectPeek(RBRACE);
         printNonTerminal("/whileStatement");
-
+    }
     void parseReturn() {
         printNonTerminal("returnStatement");
         expectPeek(RETURN);
