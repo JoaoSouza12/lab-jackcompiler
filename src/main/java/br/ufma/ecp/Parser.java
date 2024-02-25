@@ -219,6 +219,17 @@ public class Parser {
         printNonTerminal("/expression");
     }
 
+    void parseReturn() {
+        printNonTerminal("returnStatement");
+        expectPeek(RETURN);
+        if (!peekTokenIs(SEMICOLON)) {
+            parseExpression();
+        }
+        expectPeek(SEMICOLON);
+
+        printNonTerminal("/returnStatement");
+    }
+    
     void parseSubroutineDec() {
         printNonTerminal("subroutineDec");
         expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
