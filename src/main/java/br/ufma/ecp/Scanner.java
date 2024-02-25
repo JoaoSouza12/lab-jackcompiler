@@ -225,4 +225,31 @@ public class Scanner {
             if (ch == '\n')
                 line++;
     }
+
+
+    private void skipBlockComments() {
+        boolean endComment = false;
+        advance();
+        while (!endComment) {
+            advance();
+            char ch = peek();
+
+            if (ch == '\n')
+                line++;
+
+            if (ch == 0) { // eof, lexical error
+                System.exit(1);
+            }
+
+            if (ch == '*') {
+                for (ch = peek(); ch == '*'; advance(), ch = peek())
+                    ;
+                if (ch == '/') {
+                    endComment = true;
+                    advance();
+                }
+            }
+
+        }
+    }
 }
