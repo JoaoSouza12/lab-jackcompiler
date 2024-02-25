@@ -156,12 +156,14 @@ public class Scanner {
     }
 
     private Token identifier() {
-        while (isAlphaNumeric(peek())) advance();
+        while (isAlphaNumeric(peek()))
+            advance();
 
-        String id = new String(input, start, current-start, StandardCharsets.UTF_8)  ;
+        String id = new String(input, start, current - start, StandardCharsets.UTF_8);
         TokenType type = keywords.get(id);
-        if (type == null) type = IDENT;
-        return new Token(type, id);
+        if (type == null)
+            type = IDENT;
+        return new Token(type, id, line);
     }
 
     private Token number() {
@@ -209,6 +211,18 @@ public class Scanner {
        return 0;
     }
 
+    private char peekNext() {
+        int next = current + 1;
+        if (next < input.length) {
+            return (char) input[next];
+        } else {
+            return 0;
+        }
+    }
 
-    
+    private void skipLineComments() {
+        for (char ch = peek(); ch != '\n' && ch != 0; advance(), ch = peek())
+            if (ch == '\n')
+                line++;
+    }
 }
