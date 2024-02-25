@@ -55,12 +55,34 @@ public class Parser {
     boolean currentTokenIs(TokenType type) {
         return currentToken.type == type;
     }
+
+
     private void nextToken() {
         currentToken = peekToken;
         peekToken = scan.nextToken();
     }
+    
+    private void expectPeek(TokenType... types) {
+        for (TokenType type : types) {
+            if (peekToken.type == type) {
+                expectPeek(type);
+                return;
+            }
+        }
 
-   private void match(TokenType t) {
+        throw error(peekToken, "Expected a statement");
+
+    }
+    private ParseError error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
+        return new ParseError();
+    }
+    
+    private void match(TokenType t) {
         if (currentToken.type == t) {
             nextToken();
         }else {
