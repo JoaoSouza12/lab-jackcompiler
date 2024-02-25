@@ -218,6 +218,20 @@ public class Parser {
         }
         printNonTerminal("/expression");
     }
+    
+    void parseSubroutineBody() {
+    
+        printNonTerminal("subroutineBody");
+        expectPeek(LBRACE);
+        while (peekTokenIs(VAR)) {
+            parseVarDec();
+        }
+
+        parseStatements();
+        expectPeek(RBRACE);
+        printNonTerminal("/subroutineBody");
+    }
+
     void parseVarDec() {
         printNonTerminal("varDec");
         expectPeek(VAR);
