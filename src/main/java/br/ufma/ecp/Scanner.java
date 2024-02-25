@@ -20,9 +20,27 @@ public class Scanner {
 
     static {
         keywords = new HashMap<>();
-        keywords.put("method",    TokenType.METHOD);
-        keywords.put("while",  TokenType.WHILE);
-        keywords.put("if",   TokenType.IF);
+        keywords.put("while", TokenType.WHILE);
+        keywords.put("int", TokenType.INT);
+        keywords.put("class", TokenType.CLASS);
+        keywords.put("constructor", TokenType.CONSTRUCTOR);
+        keywords.put("function", TokenType.FUNCTION);
+        keywords.put("method", TokenType.METHOD);
+        keywords.put("field", TokenType.FIELD);
+        keywords.put("static", TokenType.STATIC);
+        keywords.put("var", TokenType.VAR);
+        keywords.put("char", TokenType.CHAR);
+        keywords.put("boolean", TokenType.BOOLEAN);
+        keywords.put("void", TokenType.VOID);
+        keywords.put("true", TokenType.TRUE);
+        keywords.put("false", TokenType.FALSE);
+        keywords.put("null", TokenType.NULL);
+        keywords.put("this", TokenType.THIS);
+        keywords.put("let", TokenType.LET);
+        keywords.put("do", TokenType.DO);
+        keywords.put("if", TokenType.IF);
+        keywords.put("else", TokenType.ELSE);
+        keywords.put("return", TokenType.RETURN);
     }
 
     
@@ -41,7 +59,7 @@ public class Scanner {
     }
     
 
-    public Token nextToken () {
+    public Token nextToken() {
 
         skipWhitespace();
 
@@ -57,19 +75,83 @@ public class Scanner {
         }
 
         switch (ch) {
+            case '/':
+                if (peekNext() == '/') {
+                    skipLineComments();
+                    return nextToken();
+                } else if (peekNext() == '*') {
+                    skipBlockComments();
+                    return nextToken();
+                }
+
+                else {
+                    advance();
+                    return new Token(TokenType.SLASH, "/", line);
+                }
+
             case '+':
                 advance();
-                return new Token (PLUS,"+");
+                return new Token(TokenType.PLUS, "+", line);
             case '-':
                 advance();
-                return new Token (MINUS,"-");
+                return new Token(TokenType.MINUS, "-", line);
+            case '*':
+                advance();
+                return new Token(TokenType.ASTERISK, "*", line);
+            case '.':
+                advance();
+                return new Token(TokenType.DOT, ".", line);
+            case '&':
+                advance();
+                return new Token(TokenType.AND, "&", line);
+            case '|':
+                advance();
+                return new Token(TokenType.OR, "|", line);
+            case '~':
+                advance();
+                return new Token(TokenType.NOT, "~", line);
+
+            case '>':
+                advance();
+                return new Token(TokenType.GT, ">", line);
+            case '<':
+                advance();
+                return new Token(TokenType.LT, "<", line);
+            case '=':
+                advance();
+                return new Token(TokenType.EQ, "=", line);
+
+            case '(':
+                advance();
+                return new Token(TokenType.LPAREN, "(", line);
+            case ')':
+                advance();
+                return new Token(TokenType.RPAREN, ")", line);
+            case '{':
+                advance();
+                return new Token(TokenType.LBRACE, "{", line);
+            case '}':
+                advance();
+                return new Token(TokenType.RBRACE, "}", line);
+            case '[':
+                advance();
+                return new Token(TokenType.LBRACKET, "[", line);
+            case ']':
+                advance();
+                return new Token(TokenType.RBRACKET, "]", line);
+            case ';':
+                advance();
+                return new Token(TokenType.SEMICOLON, ";", line);
+            case ',':
+                advance();
+                return new Token(TokenType.COMMA, ",", line);
             case '"':
                 return string();
             case 0:
-                return new Token (EOF,"EOF");
+                return new Token(EOF, "EOF", line);
             default:
                 advance();
-                return new Token(ILLEGAL, Character.toString(ch));
+                return new Token(ILLEGAL, Character.toString(ch), line);
         }
     }
 
