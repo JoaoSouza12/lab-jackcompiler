@@ -9,7 +9,8 @@ public class Parser {
     private Scanner scan;
     private Token currentToken;
     private Token peekToken;
-    private StringBuilder xmlOutput = new StringBuilder();
+    private StringBuilder xmlOutput = new StringBu
+    ilder();
     
     public Parser(byte[] input) {
         scan = new Scanner(input);
@@ -39,7 +40,21 @@ public class Parser {
 
         printNonTerminal("/class");
     }
+    public String XMLOutput() {
+        return xmlOutput.toString();
+    }
 
+    private void printNonTerminal(String nterminal) {
+        xmlOutput.append(String.format("<%s>\r\n", nterminal));
+    }
+
+    boolean peekTokenIs(TokenType type) {
+        return peekToken.type == type;
+    }
+
+    boolean currentTokenIs(TokenType type) {
+        return currentToken.type == type;
+    }
     private void nextToken() {
         currentToken = peekToken;
         peekToken = scan.nextToken();
