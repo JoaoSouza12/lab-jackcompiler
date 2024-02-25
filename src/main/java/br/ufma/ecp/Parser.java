@@ -61,6 +61,12 @@ public class Parser {
         currentToken = peekToken;
         peekToken = scan.nextToken();
     }
+ 
+    private static void report(int line, String where,
+    String message) {
+        System.err.println(
+        "[line " + line + "] Error" + where + ": " + message);
+    }
     
     private void expectPeek(TokenType... types) {
         for (TokenType type : types) {
@@ -89,6 +95,94 @@ public class Parser {
             throw new Error("syntax error");
         }
    }
+
+   void parseTerm() {
+    printNonTerminal("term");
+    switch (peekToken.type) {
+        case NUMBER:
+            expectPeek(NUMBER);
+            break;
+        case STRING:
+            expectPeek(STRING);
+            break;
+        case FALSE:
+        case NULL:
+        case TRUE:
+        case THIS:
+            expectPeek(FALSE, NULL, TRUE, THIS);
+            break;
+        case IDENT:
+            expectPeek(IDENT);
+            if (peekTokenIs(LPAREN) || peekTokenIs(DOT)) {
+                parseSubroutineCall();
+            } else { // variavel comum ou array
+                if (peekTokenIs(LBRACKET)) { // array
+                    expectPeek(LBRACKET);
+                    parseExpression();
+                    expectPeek(RBRACKET);
+                } 
+            }
+            break;
+        case LPAREN:
+            expectPeek(LPAREN);
+            parseExpression();
+            expectPeek(RPAREN);
+            break;
+        case MINUS:
+        case NOT:
+            expectPeek(MINUS, NOT);
+            parseTerm();
+            break;
+        default:
+            ;
+    }
+    printNonTerminal("/term");
+}
+  void parseTerm() {
+        printNonTerminal("term");
+        switch (peekToken.type) {
+            case NUMBER:
+                expectPeek(NUMBER);
+                break;
+            case STRING:
+                expectPeek(STRING);
+                break;
+            case FALSE:
+            case NULL:
+            case TRUE:
+            case THIS:
+                expectPeek(FALSE, NULL, TRUE, THIS);
+                break;
+            case IDENT:
+                expectPeek(IDENT);
+                if (peekTokenIs(LPAREN) || peekTokenIs(DOT)) {
+                    parseSubroutineCall();
+                } else { // variavel comum ou array
+                    if (peekTokenIs(LBRACKET)) { // array
+                        expectPeek(LBRACKET);
+                        parseExpression();
+                        expectPeek(RBRACKET);
+                    } 
+                }
+                break;
+            case LPAREN:
+                expectPeek(LPAREN);
+                parseExpression();
+                expectPeek(RPAREN);
+                break;
+            case MINUS:
+            case NOT:
+                expectPeek(MINUS, NOT);
+                parseTerm();
+                break;
+            default:
+                ;
+        }
+        printNonTerminal("/term");
+    }
+    static public boolean isOperator(String op) {
+        return op != "" && "+-*/<>=~&|".contains(op);
+    }
 
     void oper () {
         if (currentToken.type == TokenType.PLUS) {
