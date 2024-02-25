@@ -219,6 +219,17 @@ public class Parser {
         printNonTerminal("/expression");
     }
 
+    void parseWhile() {
+        printNonTerminal("whileStatement");
+        expectPeek(WHILE);
+        expectPeek(LPAREN);
+        parseExpression();
+        expectPeek(RPAREN);
+        expectPeek(LBRACE);
+        parseStatements();
+        expectPeek(RBRACE);
+        printNonTerminal("/whileStatement");
+
     void parseReturn() {
         printNonTerminal("returnStatement");
         expectPeek(RETURN);
@@ -229,7 +240,7 @@ public class Parser {
 
         printNonTerminal("/returnStatement");
     }
-    
+
     void parseSubroutineDec() {
         printNonTerminal("subroutineDec");
         expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
