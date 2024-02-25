@@ -123,6 +123,69 @@ public class ParserTest extends TestSupport {
 
     }
 
+    @Test
+    public void testParseLetSimpleConchentes() {
+        var input = "let var1[1] = 10+20;";
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseLet();
+        var expectedResult = """
+                  <letStatement>
+                  <keyword> let </keyword>
+                  <identifier> var1 </identifier>
+                  <symbol> [ </symbol>
+                  <expression>
+                  <term>
+                  <integerConstant> 1 </integerConstant>
+                  </term>
+                  </expression>
+                  <symbol> ] </symbol>
+                  <symbol> = </symbol>
+                  <expression>
+                    <term>
+                    <integerConstant> 10 </integerConstant>
+                    </term>
+                    <symbol> + </symbol>
+                    <term>
+                    <integerConstant> 20 </integerConstant>
+                    </term>
+                    </expression>
+                  <symbol> ; </symbol>
+                </letStatement>
+                          """;
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
+        result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
+        assertEquals(expectedResult, result);
+    }
 
+    @Test
+    public void testParseDo() {
+        var input = "do Sys.wait(5);";
+        var parser = new Parser(input.getBytes(StandardCharsets.UTF_8));
+        parser.parseDo();
+
+        var expectedResult = """
+            <doStatement>
+            <keyword> do </keyword>
+            <identifier> Sys </identifier>
+            <symbol> . </symbol>
+            <identifier> wait </identifier>
+            <symbol> ( </symbol>
+            <expressionList>
+              <expression>
+                <term>
+                  <integerConstant> 5 </integerConstant>
+                </term>
+              </expression>
+            </expressionList>
+            <symbol> ) </symbol>
+            <symbol> ; </symbol>
+          </doStatement>
+                """;
+        var result = parser.XMLOutput();
+        expectedResult = expectedResult.replaceAll("  ", "");
+        result = result.replaceAll("\r", ""); // no codigo em linux não tem o retorno de carro
+        assertEquals(expectedResult, result);
+    }
 
 }
