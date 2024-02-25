@@ -21,6 +21,20 @@ public class Parser {
         parseClass();
     }
 
+    void parseSubroutineCall() {
+        if (peekTokenIs(LPAREN)) {
+            expectPeek(LPAREN);
+            parseExpressionList();
+            expectPeek(RPAREN);
+        } else {
+            expectPeek(DOT);
+            expectPeek(IDENT);
+            expectPeek(LPAREN);
+            parseExpressionList();
+            expectPeek(RPAREN);
+        }
+    }
+
     void parseClass() {
         printNonTerminal("class");
         expectPeek(CLASS);
@@ -267,6 +281,24 @@ void parseClassVarDec() {
         printNonTerminal("/expression");
     }
 
+
+
+    void parseLet() {
+        printNonTerminal("letStatement");
+        expectPeek(LET);
+        expectPeek(IDENT);
+
+        if (peekTokenIs(LBRACKET)) {
+            expectPeek(LBRACKET);
+            parseExpression();
+            expectPeek(RBRACKET);
+        }
+
+        expectPeek(EQ);
+        parseExpression();
+        expectPeek(SEMICOLON);
+        printNonTerminal("/letStatement");
+    }
 
     void parseStatement() {
         switch (peekToken.type) {
