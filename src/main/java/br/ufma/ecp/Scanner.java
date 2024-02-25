@@ -16,7 +16,8 @@ public class Scanner {
     private int start;
 
     private static final Map<String, TokenType> keywords;
- 
+    private int line = 1;
+
 
     static {
         keywords = new HashMap<>();
@@ -170,19 +171,19 @@ public class Scanner {
         while (Character.isDigit(peek())) {
             advance();
         }
-        
-            String num = new String(input, start, current-start, StandardCharsets.UTF_8)  ;
-            return new Token(NUMBER, num);
+
+        String num = new String(input, start, current - start, StandardCharsets.UTF_8);
+        return new Token(NUMBER, num, line);
     }
 
-    private Token string () {
+    private Token string() {
         advance();
         start = current;
         while (peek() != '"' && peek() != 0) {
             advance();
         }
-        String s = new String(input, start, current-start, StandardCharsets.UTF_8);
-        Token token = new Token (TokenType.STRING,s);
+        String s = new String(input, start, current - start, StandardCharsets.UTF_8);
+        Token token = new Token(TokenType.STRING, s, line);
         advance();
         return token;
     }

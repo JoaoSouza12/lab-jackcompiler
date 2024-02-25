@@ -171,24 +171,6 @@ void parseClassVarDec() {
         return op != "" && "+-*/<>=~&|".contains(op);
     }
 
-    void oper () {
-        if (currentToken.type == TokenType.PLUS) {
-            match(TokenType.PLUS);
-            number();
-            System.out.println("add");
-            oper();
-        } else if (currentToken.type == TokenType.MINUS) {
-            match(TokenType.MINUS);
-            number();
-            System.out.println("sub");
-            oper();
-        } else if (currentToken.type == TokenType.EOF) {
-            // vazio
-        } else {
-            throw new Error("syntax error");
-        }
-    }
-
     public String VMOutput() {
         return "";
     }
@@ -251,7 +233,20 @@ void parseClassVarDec() {
         printNonTerminal("/letStatement");
     }
 
-    void parseStatement() {
+
+        void parseStatements() {
+            printNonTerminal("statements");
+            while (peekToken.type == WHILE ||
+                    peekToken.type == IF ||
+                    peekToken.type == LET ||
+                    peekToken.type == DO ||
+                    peekToken.type == RETURN) {
+                parseStatement();
+            }
+    
+            printNonTerminal("/statements");
+        }
+        void parseStatement() {
         switch (peekToken.type) {
             case LET:
                 parseLet();

@@ -1,4 +1,6 @@
 package br.ufma.ecp.token;
+import static br.ufma.ecp.token.TokenType.isSymbol;
+
 public class Token {
 
     public final TokenType type;
