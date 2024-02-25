@@ -208,32 +208,7 @@ public class Parser {
     public String VMOutput() {
         return "";
     }
-    void parseTerm() {
-        printNonTerminal("term");
-        switch (peekToken.type) {
-            case NUMBER:
-                expectPeek(NUMBER);
-                break;
-            case STRING:
-                expectPeek(STRING);
-                break;
-            case FALSE:
-            case NULL:
-            case TRUE:
-                expectPeek(TokenType.FALSE, TokenType.NULL, TokenType.TRUE);
-                break;
-            case THIS:
-                expectPeek(TokenType.THIS);
-                break;
-            case IDENT:
-                expectPeek(TokenType.IDENT);
-                break;
-            default:
-                throw error(peekToken, "term expected");
-        }
-
-        printNonTerminal("/term");
-    }
+ 
     void parseExpression() {
         printNonTerminal("expression");
         parseTerm ();
@@ -242,5 +217,20 @@ public class Parser {
             parseTerm();
         }
         printNonTerminal("/expression");
+    }
+    void parseVarDec() {
+        printNonTerminal("varDec");
+        expectPeek(VAR);
+        // 'int' | 'char' | 'boolean' | className
+        expectPeek(INT, CHAR, BOOLEAN, IDENT);
+        expectPeek(IDENT);
+
+        while (peekTokenIs(COMMA)) {
+            expectPeek(COMMA);
+            expectPeek(IDENT);
+        }
+
+        expectPeek(SEMICOLON);
+        printNonTerminal("/varDec");
     }
 }
