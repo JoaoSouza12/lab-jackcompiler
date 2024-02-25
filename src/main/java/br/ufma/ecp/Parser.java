@@ -239,6 +239,23 @@ void parseClassVarDec() {
         expectPeek(RBRACE);
         printNonTerminal("/ifStatement");
     }
+    
+    void parseExpressionList() {
+        printNonTerminal("expressionList");
+
+        if (!peekTokenIs(RPAREN)) // verifica se tem pelo menos uma expressao
+        {
+            parseExpression();
+        }
+
+        // procurando as demais
+        while (peekTokenIs(COMMA)) {
+            expectPeek(COMMA);
+            parseExpression();
+        }
+
+        printNonTerminal("/expressionList");
+    }
 
     void parseExpression() {
         printNonTerminal("expression");
@@ -271,6 +288,16 @@ void parseClassVarDec() {
             default:
                 throw error(peekToken, "Expected a statement");
         }
+    }
+
+
+    public void parseDo() {
+        printNonTerminal("doStatement");
+        expectPeek(DO);
+        expectPeek(IDENT);
+        parseSubroutineCall();
+        expectPeek(SEMICOLON);
+        printNonTerminal("/doStatement");
     }
 
     void parseWhile() {
