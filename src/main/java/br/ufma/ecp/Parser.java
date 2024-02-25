@@ -138,6 +138,24 @@ public class Parser {
     }
     printNonTerminal("/term");
 }
+
+
+void parseClassVarDec() {
+    printNonTerminal("classVarDec");
+    expectPeek(FIELD, STATIC);
+    // 'int' | 'char' | 'boolean' | className
+    expectPeek(INT, CHAR, BOOLEAN, IDENT);
+    expectPeek(IDENT);
+
+    while (peekTokenIs(COMMA)) {
+        expectPeek(COMMA);
+        expectPeek(IDENT);
+    }
+
+    expectPeek(SEMICOLON);
+    printNonTerminal("/classVarDec");
+}
+
   void parseTerm() {
         printNonTerminal("term");
         switch (peekToken.type) {
@@ -209,6 +227,19 @@ public class Parser {
         return "";
     }
  
+
+    void parseIf() {
+        printNonTerminal("ifStatement");
+        expectPeek(IF);
+        expectPeek(LPAREN);
+        parseExpression();
+        expectPeek(RPAREN);
+        expectPeek(LBRACE);
+        parseStatements();
+        expectPeek(RBRACE);
+        printNonTerminal("/ifStatement");
+    }
+
     void parseExpression() {
         printNonTerminal("expression");
         parseTerm ();
