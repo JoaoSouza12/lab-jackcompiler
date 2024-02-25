@@ -219,6 +219,21 @@ public class Parser {
         printNonTerminal("/expression");
     }
 
+    void parseSubroutineDec() {
+        printNonTerminal("subroutineDec");
+        expectPeek(CONSTRUCTOR, FUNCTION, METHOD);
+        // 'int' | 'char' | 'boolean' | className
+        expectPeek(VOID, INT, CHAR, BOOLEAN, IDENT);
+        expectPeek(IDENT);
+
+        expectPeek(LPAREN);
+        parseParameterList();
+        expectPeek(RPAREN);
+        parseSubroutineBody();
+
+        printNonTerminal("/subroutineDec");
+    }
+
     void parseParameterList() {
         printNonTerminal("parameterList");
 
@@ -236,7 +251,7 @@ public class Parser {
 
         printNonTerminal("/parameterList");
     }
-    
+
     void parseSubroutineBody() {
     
         printNonTerminal("subroutineBody");
