@@ -1,4 +1,5 @@
 # Projeto Lab-JackCompiler
+Alunos: João José Penha Sousa e Lucas Salustriano dos Santos
 
 Este projeto é uma implementação de um compilador para a linguagem Jack, uma linguagem de programação de alto nível usada no curso "Nand to Tetris". O compilador é composto por duas partes principais: um analisador léxico (também conhecido como scanner) e um analisador sintático (também conhecido como parser).
 
